@@ -584,12 +584,44 @@ function goBack() {
   if (current > 0) { current--; updateUI(); }
 }
 
-function submitForm() {
-  const data = { _time: new Date().toLocaleString('id-ID', {dateStyle:'long', timeStyle:'short'}) };
-  FIELDS.forEach(f => { data[f.id] = (document.getElementById(f.id)?.value || '').trim(); });
-  SLIDERS.forEach((_, i) => { data['sl'+i] = document.getElementById('sl'+i)?.value || '5'; });
-  const arr = getAll(); arr.push(data); saveAll(arr); updateBadge();
-  current = TOTAL_PAGES - 1; updateUI();
+async function submitForm() {
+
+  const data = {
+    _time: new Date().toLocaleString('id-ID', {
+      dateStyle:'long',
+      timeStyle:'short'
+    })
+  };
+
+  FIELDS.forEach(f => {
+    data[f.id] =
+      (document.getElementById(f.id)?.value || '').trim();
+  });
+
+  SLIDERS.forEach((_, i) => {
+    data['sl'+i] =
+      document.getElementById('sl'+i)?.value || '5';
+  });
+
+  try {
+
+    await fetch(
+  'https://script.google.com/macros/s/AKfycbyKgT3UzsOCsUuyiqdTt7fzgXS127LBxs6AQr1raCiwuizVxpEcZxmCJzCuHPegeSxu/exec',
+  {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }
+);
+
+    current = TOTAL_PAGES - 1;
+    updateUI();
+
+  } catch(err) {
+
+    alert('Gagal mengirim jawaban 😢');
+
+    console.error(err);
+  }
 }
 
 function getAll() { try { return JSON.parse(localStorage.getItem('fifaform_v3') || '[]'); } catch(e) { return []; } }
