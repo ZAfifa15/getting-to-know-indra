@@ -659,5 +659,25 @@ document.getElementById('pass-modal').addEventListener('click', e => { if(e.targ
 updateUI();
 updateBadge();
 </script>
+
+<form
+  id="gsForm"
+  action="https://script.google.com/macros/s/AKfycbyKgT3UzsOCsUuyiqdTt7fzgXS127LBxs6AQr1raCiwuizVxpEcZxmCJzCuHPegeSxu/exec"
+  method="POST"
+  target="hidden_iframe"
+  style="display:none">
+
+  <input
+    type="hidden"
+    id="sheetData"
+    name="data">
+
+</form>
+
+<iframe
+  name="hidden_iframe"
+  style="display:none">
+</iframe>
+
 </body>
 </html>
