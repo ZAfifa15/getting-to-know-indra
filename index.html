@@ -603,25 +603,13 @@ async function submitForm() {
       document.getElementById('sl'+i)?.value || '5';
   });
 
-  try {
+  document.getElementById('sheetData').value =
+    JSON.stringify(data);
 
-   await fetch(
-  'https://script.google.com/macros/s/AKfycbyKgT3UzsOCsUuyiqdTt7fzgXS127LBxs6AQr1raCiwuizVxpEcZxmCJzCuHPegeSxu/exec',
-  {
-    method: 'POST',
-    body: JSON.stringify(data)
-  }
-);
+  document.getElementById('gsForm').submit();
 
-    current = TOTAL_PAGES - 1;
-    updateUI();
-
-  } catch(err) {
-
-    alert('Gagal mengirim jawaban 😢');
-
-    console.error(err);
-  }
+  current = TOTAL_PAGES - 1;
+  updateUI();
 }
 
 function getAll() { try { return JSON.parse(localStorage.getItem('fifaform_v3') || '[]'); } catch(e) { return []; } }
