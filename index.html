@@ -585,9 +585,6 @@ function goBack() {
 }
 
 async function submitForm() {
-
-  alert("submitForm jalan!");
-
   const data = {
     _time: new Date().toLocaleString('id-ID', {
       dateStyle:'long',
@@ -596,23 +593,31 @@ async function submitForm() {
   };
 
   FIELDS.forEach(f => {
-    data[f.id] =
-      (document.getElementById(f.id)?.value || '').trim();
+    data[f.id] = (document.getElementById(f.id)?.value || '').trim();
   });
 
   SLIDERS.forEach((_, i) => {
-    data['sl'+i] =
-      document.getElementById('sl'+i)?.value || '5';
+    data['sl'+i] = document.getElementById('sl'+i)?.value || '5';
   });
 
-  document.getElementById('sheetData').value =
-    JSON.stringify(data);
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKgT3UzsOCsUuyiqdTt7fzgXS127LBxs6AQr1raCiwuizVxpEcZxmCJzCuHPegeSxu/exec';
 
-  document.getElementById('gsForm').submit();
+  try {
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(data));
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: formData
+    });
+  } catch(e) {
+    console.log('Error:', e);
+  }
 
   current = TOTAL_PAGES - 1;
   updateUI();
 }
+
 
 function getAll() { try { return JSON.parse(localStorage.getItem('fifaform_v3') || '[]'); } catch(e) { return []; } }
 function saveAll(a) { localStorage.setItem('fifaform_v3', JSON.stringify(a)); }
@@ -662,24 +667,6 @@ updateUI();
 updateBadge();
 </script>
 
-<form
-  id="gsForm"
-  action="https://script.google.com/macros/s/AKfycbyKgT3UzsOCsUuyiqdTt7fzgXS127LBxs6AQr1raCiwuizVxpEcZxmCJzCuHPegeSxu/exec"
-  method="POST"
-  target="hidden_iframe"
-  style="display:none">
-
-  <input
-    type="hidden"
-    id="sheetData"
-    name="data">
-
-</form>
-
-<iframe
-  name="hidden_iframe"
-  style="display:none">
-</iframe>
 
 </body>
 </html>
